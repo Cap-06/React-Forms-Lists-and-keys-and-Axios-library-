@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Profiles</title>
+  <style>
+    body {
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    #root {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+
+    .user-profile {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .user-profile p {
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    let users = [
+      { id: 1, name: 'John Doe', age: 25 },
+      { id: 2, name: 'Jane Smith', age: 30 },
+      { id: 3, name: 'Bob Johnson', age: 35 },
+      { id: 4, name: 'Alice Williams', age: 28 },
+      { id: 5, name: 'Kunj pratap singh', age: 23 },
+      { id: 6, name: 'Lalit Sharma', age: 28 },
+      { id: 7, name: 'Tony Stark', age: 55 },
+      { id: 8, name: 'Steve Roger', age: 45 }
+
+    ];
+
+    function UserProfile({ user }) {
+      return (
+        <div className="user-profile">
+          <h2>{user.name}</h2>
+          <p>Age: {user.age}</p>
+        </div>
+      );
+    }
+
+    function App() {
+      let [searchTerm, setSearchTerm] = React.useState('');
+      
+      let handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+      };
+
+      let filteredUsers = users.filter(user =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      return (
+        <div>
+          <h1>User Profiles</h1>
+          <input type="text" placeholder="Search by name" value={searchTerm} onChange={handleSearch} />
+          {filteredUsers.map(user => (
+            <UserProfile key={user.id} user={user} />
+          ))}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>

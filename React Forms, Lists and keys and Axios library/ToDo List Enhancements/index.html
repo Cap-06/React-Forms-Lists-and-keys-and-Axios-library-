@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo List</title>
+    <style>
+        *{
+            text-align: center;
+        }
+        body {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        h2{
+            font-size: 2em;
+
+        }
+
+        .container {
+            max-width: 600px;
+            margin:auto;
+            padding: 20px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .todo-item input[type="checkbox"] {
+            margin-right: 10px;
+            
+        }
+
+        .todo-item.completed span {
+            text-decoration: line-through;
+            color: #aaa;
+        }
+        input[type="text"] {
+      width: 90%;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 7px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+        button{
+            padding: 5px;
+            margin-left: 10px;
+           background-color: rgb(4, 32, 189);
+           border-radius: 10px;
+           color: #fff;
+           font-weight: bolder;
+           width: 10em;
+        }
+        button:hover {
+            background-color: #05e7fc;
+            color: black;
+            font-weight: bolder;
+        }
+
+        .delete-button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #028a24;
+            color: #fff;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #ff4d4d;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    // Your  code will go here
+    class ToDoList extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    todos: [],
+                    inputValue: ''
+                };
+            }
+
+            handleInputChange = (event) => {
+                this.setState({ inputValue: event.target.value });
+            }
+
+            handleSubmit = (event) => {
+                event.preventDefault();
+                if (this.state.inputValue.trim() !== '') {
+                    let newTodo = {
+                        id: Date.now(),
+                        text: this.state.inputValue,
+                        completed: false
+                    };
+                    this.setState((prevState) => ({
+                        todos: [...prevState.todos, newTodo],
+                        inputValue: ''
+                    }));
+                }
+            }
+
+            handleDelete = (id) => {
+                this.setState((prevState) => ({
+                    todos: prevState.todos.filter(todo => todo.id !== id)
+                }));
+            }
+
+            handleToggleComplete = (id) => {
+                this.setState((prevState) => ({
+                    todos: prevState.todos.map(todo => {
+                        if (todo.id === id) {
+                            return { ...todo, completed: !todo.completed };
+                        }
+                        return todo;
+                    })
+                }));
+            }
+
+            render() {
+                return (
+                    <div>
+                        <h2>ToDo List</h2>
+                        <form onSubmit={this.handleSubmit}>
+         <input type="text" value={this.state.inputValue}onChange={this.handleInputChange} placeholder="Enter New Todo..." />
+                            <button type="submit">Submit</button>
+                        </form>
+                        <ul>
+            {this.state.todos.map(todo => (
+            <li
+                key={todo.id}
+            className={`todo-item ${todo.completed ? 'completed' : ''}`}>
+        <input type="checkbox" checked={todo.completed} onChange={() => this.handleToggleComplete(todo.id)}/>
+                    <span>{todo.text}</span>
+                        <button className="delete-button" onClick={() => this.handleDelete(todo.id)}> Delete</button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                );
+            }
+        }
+
+        // Render the ToDoList component
+        ReactDOM.render(<ToDoList />, document.getElementById('root'));
+  </script>
+</html>
